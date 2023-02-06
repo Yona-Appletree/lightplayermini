@@ -6,6 +6,10 @@ export abstract class PValue {
 }
 
 export class PScalar extends PValue {
+	static of(value: number) {
+		return new PScalar(value)
+	}
+
 	constructor(
 		public readonly value: number
 	) {

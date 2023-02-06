@@ -6,9 +6,9 @@ import VoxelSliceDisplay from "./VoxelSliceDisplay";
 
 const App = () => {
     return <>
-        {/*<ThreeCanvas width={800} height={800}></ThreeCanvas>*/}
+        <ThreeCanvas width={800} height={800}></ThreeCanvas>
         {/*<VoxelDisplay width={800} height={800}></VoxelDisplay>*/}
-        <VoxelSliceDisplay></VoxelSliceDisplay>
+        {/*<VoxelSliceDisplay></VoxelSliceDisplay>*/}
     </>;
 };
 

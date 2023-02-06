@@ -1,25 +1,22 @@
-import { LiteContext, registerNode } from "../LiteNode";
-import { liteScalar, LiteScalar } from "../LiteValue";
+import { LiteNodeContext, NodeOutput, registerNode } from "../LiteNode";
+import { liteScalar } from "../LiteValue";
 
-export class TimeMsNode {
+export class TimeNode {
 	static definition = {
-		type: "timeMs",
+		type: "TimeNode",
 		inputs: {},
 		outputs: {
-			value: "scalar"
+			frameStartMs: "scalar"
 		},
 	} as const
 
-	compute(
-		context: LiteContext,
-		input: {}
-	): {
-		value: LiteScalar
-	} {
+	update(
+		context: LiteNodeContext<typeof TimeNode.definition>
+	): NodeOutput<typeof TimeNode.definition> {
 		return {
-			value: liteScalar(context.currentTimeMs()),
+			frameStartMs: liteScalar(context.frameStartMs()),
 		}
 	}
 }
 
-registerNode(TimeMsNode)
+registerNode(TimeNode)

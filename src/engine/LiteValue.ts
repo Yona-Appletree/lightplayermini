@@ -3,6 +3,7 @@ export type LiteTypeSlug =
 	| "vector"
 	| "rgb"
 	| "hsv"
+	| "function"
 
 
 export abstract class LiteValue {
@@ -15,6 +16,10 @@ export abstract class LiteValue {
 
 	asNumber(): number {
 		return this.asScalar().value
+	}
+
+	asFunction() {
+		return new LiteFunction(() => this)
 	}
 }
 
@@ -52,6 +57,10 @@ export class LiteScalar extends LiteValue {
 
 export class LiteVector extends LiteValue {
 	override readonly type = 'vector'
+
+	static from(p: { x: number, y: number, z: number, a: number }) {
+		return new LiteVector(p.x, p.y, p.z, p.a);
+	}
 
 	constructor(
 		public readonly x: number,
@@ -92,10 +101,6 @@ export class LiteVector extends LiteValue {
 
 	asArray(): [number, number, number, number] {
 		return [ this.x, this.y, this.z, this.a ]
-	}
-
-	static from(p: { x: number, y: number, z: number, a: number }) {
-		return new LiteVector(p.x, p.y, p.z, p.a);
 	}
 
 	normalize() {
@@ -217,5 +222,35 @@ export class LiteHsvColor extends LiteValue  {
 
 	withValue(value: number) {
 		return new LiteHsvColor(this.h, this.s, value)
+	}
+}
+
+export class LiteFunction extends LiteValue {
+	override readonly type = 'function'
+
+	constructor(
+		public readonly func: (value: LiteValue) => LiteValue
+	) {
+		super();
+	}
+
+	override asHsv(): LiteHsvColor {
+		throw new Error("Cannot convert function to HSV")
+	}
+
+	override asRgb(): LiteRgbColor {
+		throw new Error("Cannot convert function to RGB")
+	}
+
+	override asScalar(): LiteScalar {
+		throw new Error("Cannot convert function to Scalar")
+	}
+
+	override asVector(): LiteVector {
+		throw new Error("Cannot convert function to Scalar")
+	}
+
+	override asFunction() {
+		return this
 	}
 }

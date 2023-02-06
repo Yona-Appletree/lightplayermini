@@ -9,6 +9,7 @@
     "jsxFactory": "React.createElement",
     "jsxFragmentFactory": "React.Fragment",
     "allowJs": true,
+    "moduleResolution": "Node"
   },
   "include": [
     "src/**/*.ts*"

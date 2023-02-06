@@ -1,4 +1,4 @@
-import { LiteContext, LiteNodeDef, LiteNodeInstance, NodeInput, NodeOutput, registerNode } from "../LiteNode";
+import { LiteNodeContext, LiteNodeDef, LiteNodeInstance, NodeInput, NodeOutput, registerNode } from "../LiteNode";
 import { liteScalar, LiteScalar } from "../LiteValue";
 
 export class IntegrationTriggerNode implements LiteNodeInstance<typeof IntegrationTriggerNode.definition> {
@@ -37,25 +37,24 @@ export class IntegrationTriggerNode implements LiteNodeInstance<typeof Integrati
 
 	private lastComputeMs: number | null = null
 
-	compute(
-		context: LiteContext,
-		input: NodeInput<typeof IntegrationTriggerNode.definition>
+	update(
+		context: LiteNodeContext<typeof IntegrationTriggerNode.definition>
 	): NodeOutput<typeof IntegrationTriggerNode.definition> {
-		this.sum += input.value.asNumber()
+		this.sum += context.inputValue('value').asNumber()
 
 		if (this.lastComputeMs != null) {
-			const durationMs = context.currentTimeMs() - this.lastComputeMs
-			this.sum -= (durationMs/1000) * input.decayRate.asNumber()
+			const durationMs = context.frameStartMs() - this.lastComputeMs
+			this.sum -= (durationMs/1000) * context.inputValue('decayRate').asNumber()
 		}
 
-		this.lastComputeMs = context.currentTimeMs()
+		this.lastComputeMs = context.frameStartMs()
 
 		if (this.sum < 0) this.sum = 0
 
-		const inputTriggerValue = input.triggerValue.asNumber()
+		const inputTriggerValue = context.inputValue('triggerValue').asNumber()
 		if (this.sum > inputTriggerValue) {
 			this.sum -= inputTriggerValue
-			this.lastTriggerMs = context.currentTimeMs()
+			this.lastTriggerMs = context.frameStartMs()
 		}
 
 		return {

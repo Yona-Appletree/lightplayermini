@@ -18,40 +18,34 @@ export interface NodeRegistration<TDef extends LiteNodeDef> {
 	new(): LiteNodeInstance<TDef>
 }
 
-export interface LiteContext {
-	currentTimeMs(): number;
+export interface LiteNodeContext<TDef extends LiteNodeDef> {
+	frameStartMs(): number;
 }
 
 export interface LiteNodeDef {
-	type: string,
-	description?: string,
-	inputs: Record<string, LiteInputDef>,
-	outputs: Record<string, LiteOutputDef>,
+	readonly type: string,
+	readonly description?: string,
+	readonly inputs: Readonly<Record<string, LiteInputDef>>,
+	readonly outputs: Readonly<Record<string, LiteOutputDef>>,
 }
 
 export interface LiteNodeInstance<TDef extends LiteNodeDef> {
-	init?(context: LiteContext): void
-	compute(
-		context: LiteContext,
+	TDef?: TDef
+
+	init?(context: LiteNodeContext<TDef>): void
+	update(
+		context: LiteNodeContext<TDef>,
 		inputs: NodeInput<TDef>
 	): NodeOutput<TDef>
 }
 
-export interface LiteNodeConnection {
-	fromNodeId: string;
-	fromOutputId: string;
-
-	toNodeId: string;
-	toInputId: string;
+export interface LiteOutputRef {
+	nodeId: string;
+	outputName: string;
 }
 
-export function nodeConnectionIdFor(connection: LiteNodeConnection) {
-	return [
-		connection.fromNodeId,
-		connection.fromOutputId,
-		connection.toNodeId,
-		connection.toInputId,
-	].join(",")
+export function nodeConnectionIdFor(nodeId: string, inputName: string) {
+	return nodeId + "$" + inputName
 }
 
 export type NodeInput<TDef extends LiteNodeDef> = Record<keyof TDef['inputs'], LiteValue>

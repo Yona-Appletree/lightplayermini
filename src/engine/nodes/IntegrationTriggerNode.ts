@@ -38,20 +38,21 @@ export class IntegrationTriggerNode implements LiteNodeInstance<typeof Integrati
 	private lastComputeMs: number | null = null
 
 	update(
-		context: LiteNodeContext<typeof IntegrationTriggerNode.definition>
+		context: LiteNodeContext<typeof IntegrationTriggerNode.definition>,
+		inputs: NodeInput<typeof IntegrationTriggerNode.definition>
 	): NodeOutput<typeof IntegrationTriggerNode.definition> {
-		this.sum += context.inputValue('value').asNumber()
+		this.sum += inputs.value.asNumber()
 
 		if (this.lastComputeMs != null) {
 			const durationMs = context.frameStartMs() - this.lastComputeMs
-			this.sum -= (durationMs/1000) * context.inputValue('decayRate').asNumber()
+			this.sum -= (durationMs/1000) * inputs.decayRate.asNumber()
 		}
 
 		this.lastComputeMs = context.frameStartMs()
 
 		if (this.sum < 0) this.sum = 0
 
-		const inputTriggerValue = context.inputValue('triggerValue').asNumber()
+		const inputTriggerValue = inputs.triggerValue.asNumber()
 		if (this.sum > inputTriggerValue) {
 			this.sum -= inputTriggerValue
 			this.lastTriggerMs = context.frameStartMs()

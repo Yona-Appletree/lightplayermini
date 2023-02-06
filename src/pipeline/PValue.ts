@@ -164,11 +164,17 @@ export class PHsvColor extends PValue  {
 		const q = v * (1 - f * s);
 		const t = v * (1 - (1 - f) * s);
 		switch (i % 6) {
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			case 0: r = v, g = t, b = p; break;
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			case 1: r = q, g = v, b = p; break;
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			case 2: r = p, g = v, b = t; break;
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			case 3: r = p, g = q, b = v; break;
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			case 4: r = t, g = p, b = v; break;
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			case 5: r = v, g = p, b = q; break;
 		}
 		return new PRgbColor(r!, g!, b!)

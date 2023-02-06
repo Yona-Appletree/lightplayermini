@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/threejs-size-test.iml" filepath="$PROJECT_DIR$/.idea/threejs-size-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/lightplayermini.iml" filepath="$PROJECT_DIR$/.idea/lightplayermini.iml" />
     </modules>
   </component>
 </project>

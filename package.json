@@ -13,6 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1np",
+    "sass": "^1.58.0",
     "three": "^0.148.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -23,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!three)/\" --env=jsdom",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

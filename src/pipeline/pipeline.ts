@@ -3,20 +3,20 @@ import { PValue } from "./PValue";
 export type PipelineFn = (input: PValue) => PValue
 
 export function pcombine(
-	...steps: PipelineFn[]
+  ...steps: PipelineFn[]
 ): PipelineFn {
-	return value => {
-		for (let step of steps) {
-			value = step(value)
-		}
+  return value => {
+    for (let step of steps) {
+      value = step(value)
+    }
 
-		return value
-	}
+    return value
+  }
 }
 
 
 export function pScalarFn(
-	fn: (input: number) => PValue
+  fn: (input: number) => PValue
 ): PipelineFn {
-	return input => fn(input.asScalar().value)
+  return input => fn(input.asScalar().value)
 }

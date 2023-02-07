@@ -1,0 +1,41 @@
+@import "common.scss";
+
+.UiNode {
+  background: $dark1;
+
+  border: 1px solid $light2;
+  font-family: "Source Code Pro", Monaco, monospace;
+
+  color: $light2;
+
+  position: absolute;
+
+  width: 320px;
+}
+
+.UiNode_Header {
+  background: $dark2;
+}
+
+.UiNode_Header_Title {
+
+}
+
+.UiNode_Detail {
+
+}
+
+.UiNode_Inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.UiNodeInput_Label {
+
+}
+
+.UiNodeInput_Value {
+  input {
+    border: 0;
+  }
+}

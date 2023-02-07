@@ -1,6 +1,6 @@
-import { LiteTypeSlug } from "./LiteValue";
+import { LiteValueSlug } from "./LiteValue";
 
 export type LiteOutputDef = {
-	type: LiteTypeSlug
-	description?: string
-} | LiteTypeSlug
+  type: LiteValueSlug
+  description?: string
+} | LiteValueSlug

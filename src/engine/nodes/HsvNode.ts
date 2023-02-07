@@ -1,6 +1,6 @@
 import { LiteNodeContext, LiteNodeInstance, NodeInput, NodeOutput, registerNode } from "../LiteNode";
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise";
-import { liteVec } from "../LiteValue";
+import { liteHsv } from "../LiteValue";
 
 const noise = new SimplexNoise()
 
@@ -8,26 +8,21 @@ export class VectorNode implements LiteNodeInstance<typeof VectorNode.definition
   static definition = {
     type: "VectorNode",
     inputs: {
-      x: {
+      h: {
         type: "scalar",
         default: 0,
       },
-      y: {
+      s: {
         type: "scalar",
-        default: 0,
+        default: 1.0,
       },
-      z: {
+      v: {
         type: "scalar",
-        default: 0,
+        default: 1.0,
       },
-      a: {
-        type: "scalar",
-        default: 0,
-      },
-
     },
     outputs: {
-      result: "vector"
+      result: "hsv"
     },
   } as const
 
@@ -36,11 +31,10 @@ export class VectorNode implements LiteNodeInstance<typeof VectorNode.definition
     inputs: NodeInput<typeof VectorNode.definition>
   ): NodeOutput<typeof VectorNode.definition> {
     return {
-      result: liteVec(
-        inputs.x.asScalar(),
-        inputs.y.asScalar(),
-        inputs.z.asScalar(),
-        inputs.a.asScalar(),
+      result: liteHsv(
+        inputs.h.asScalar(),
+        inputs.s.asScalar(),
+        inputs.v.asScalar(),
       )
     }
   }

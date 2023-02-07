@@ -63,10 +63,10 @@ export function CanvasDebugNodeUi(
 
     const {width, height} = canvas
 
-    const minX = sceneNode.inputValues.minX.asNumber()
-    const minY = sceneNode.inputValues.minY.asNumber()
-    const maxX = sceneNode.inputValues.maxX.asNumber()
-    const maxY = sceneNode.inputValues.maxY.asNumber()
+    const minX = sceneNode.inputValues.minX.asScalar()
+    const minY = sceneNode.inputValues.minY.asScalar()
+    const maxX = sceneNode.inputValues.maxX.asScalar()
+    const maxY = sceneNode.inputValues.maxY.asScalar()
     const func = sceneNode.inputValues.func.asFunction().func
 
     const imageData = ctx.createImageData(width, height )
@@ -77,7 +77,7 @@ export function CanvasDebugNodeUi(
           mapLinear(y, 0, height, minY, maxY),
           0,
           0
-        )).asNumber() * 255
+        )).asScalar() * 255
         imageData.data[i+3] = 255
       }
     }

@@ -19,7 +19,7 @@ export class TimeNode {
     context: LiteNodeContext,
     inputs: NodeInput<typeof TimeNode.definition>
   ): NodeOutput<typeof TimeNode.definition> {
-    const scale = inputs.scale.asNumber()
+    const scale = inputs.scale.asScalar()
 
     return {
       frameStartMs: liteScalar(context.frameStartMs * scale),

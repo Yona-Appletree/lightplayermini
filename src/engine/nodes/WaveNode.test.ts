@@ -6,10 +6,11 @@ describe("WaveNode", () => {
   it("has normalized defaults", () => {
     const sine = testUpdateNode(new WaveNode()).sine.func
 
-    expect(sine(liteScalar(0)).asNumber()).toBeCloseTo(.5, 10)
-    expect(sine(liteScalar(.25)).asNumber()).toBeCloseTo(1, 10)
-    expect(sine(liteScalar(.5)).asNumber()).toBeCloseTo(.5, 10)
-    expect(sine(liteScalar(.75)).asNumber()).toBeCloseTo(0, 10)
+    expect(sine(liteScalar(0)).asScalar()).toBeCloseTo(.5, 10)
+    expect(sine(liteScalar(.25)).asScalar()).toBeCloseTo(1, 10)
+    expect(sine(liteScalar(.5)).asScalar()).toBeCloseTo(.5, 10)
+    expect(sine(liteScalar(.75)).asScalar()).toBeCloseTo(0, 10)
+    
   })
 
   it("can scale the output", () => {
@@ -18,10 +19,10 @@ describe("WaveNode", () => {
       max: liteScalar(20),
     }).sine.func
 
-    expect(sine(liteScalar(0)).asNumber()).toBeCloseTo(15, 10)
-    expect(sine(liteScalar(.25)).asNumber()).toBeCloseTo(20, 10)
-    expect(sine(liteScalar(.5)).asNumber()).toBeCloseTo(15, 10)
-    expect(sine(liteScalar(.75)).asNumber()).toBeCloseTo(10, 10)
+    expect(sine(liteScalar(0)).asScalar()).toBeCloseTo(15, 10)
+    expect(sine(liteScalar(.25)).asScalar()).toBeCloseTo(20, 10)
+    expect(sine(liteScalar(.5)).asScalar()).toBeCloseTo(15, 10)
+    expect(sine(liteScalar(.75)).asScalar()).toBeCloseTo(10, 10)
   })
 
   it("can scale the period", () => {
@@ -29,10 +30,10 @@ describe("WaveNode", () => {
       period: liteScalar(100),
     }).sine.func
 
-    expect(sine(liteScalar(0)).asNumber()).toBeCloseTo(.5, 10)
-    expect(sine(liteScalar(25)).asNumber()).toBeCloseTo(1, 10)
-    expect(sine(liteScalar(50)).asNumber()).toBeCloseTo(.5, 10)
-    expect(sine(liteScalar(75)).asNumber()).toBeCloseTo(0, 10)
+    expect(sine(liteScalar(0)).asScalar()).toBeCloseTo(.5, 10)
+    expect(sine(liteScalar(25)).asScalar()).toBeCloseTo(1, 10)
+    expect(sine(liteScalar(50)).asScalar()).toBeCloseTo(.5, 10)
+    expect(sine(liteScalar(75)).asScalar()).toBeCloseTo(0, 10)
   })
 })
 

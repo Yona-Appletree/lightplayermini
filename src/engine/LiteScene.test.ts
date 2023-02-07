@@ -56,9 +56,9 @@ describe("LiteScene", () => {
       func: noiseNode.outputs.noise4
     })
 
-    const value1 = canvasNode.inputValues.func.asFunction().func(liteVec(.5, .5)).asNumber()
+    const value1 = canvasNode.inputValues.func.asFunction().func(liteVec(.5, .5)).asScalar()
     scene.nextFrame()
-    const value2 = canvasNode.inputValues.func.asFunction().func(liteVec(.5, .5)).asNumber()
+    const value2 = canvasNode.inputValues.func.asFunction().func(liteVec(.5, .5)).asScalar()
 
     expect(value1).not.toEqual(value2)
 
@@ -93,7 +93,7 @@ export class TestNode {
     inputs: NodeInput<typeof TestNode.definition>,
   ): NodeOutput<typeof TestNode.definition> {
     return {
-      scalar: inputs.scalar.asScalar(),
+      scalar: liteScalar(inputs.scalar.asScalar()),
       vector: inputs.vector.asVector(),
       function: inputs.function.asFunction()
     }

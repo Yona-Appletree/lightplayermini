@@ -27,11 +27,12 @@
 
 .UiNode_Inputs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: min-content 1fr;
+  border-bottom: 8px solid $dark3;
 }
 
 .UiNodeInput_Label {
-
+  text-align: left;
 }
 
 .UiNodeInput_Value {

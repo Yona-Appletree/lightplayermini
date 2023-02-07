@@ -22,9 +22,9 @@ export interface LiteTypeSlugMap extends Record<LiteValueSlug, LiteValue> {
 export abstract class LiteValue {
   abstract readonly type: LiteValueSlug
 
-  abstract asString(): LiteString
+  abstract asString(): string
 
-  abstract asScalar(): LiteScalar
+  abstract asScalar(): number
 
   abstract asVector(): LiteVector
 
@@ -32,12 +32,8 @@ export abstract class LiteValue {
 
   abstract asHsv(): LiteHsvColor
 
-  asNumber(): number {
-    return this.asScalar().value
-  }
-
-  asFunction(): LiteFunction {
-    return new LiteFunction(() => this)
+  asFunction(): (input: LiteValue) => LiteValue {
+    return () => this
   }
 
   asArray(): LiteArray {
@@ -69,16 +65,16 @@ export class LiteString extends LiteValue {
     return new LiteRgbColor(0, 0, 0);
   }
 
-  override asString(): LiteString {
-    return this;
+  override asString(): string {
+    return this.value;
   }
 
   override asVector(): LiteVector {
     return new LiteVector(0, 0, 0, 0);
   }
 
-  override asScalar(): LiteScalar {
-    return new LiteScalar(parseFloat(this.value))
+  override asScalar(): number {
+    return parseFloat(this.value)
   }
 }
 
@@ -105,20 +101,16 @@ export class LiteScalar extends LiteValue {
     return new LiteRgbColor(args?.r ?? this.value, args?.g ?? this.value, args?.b ?? this.value);
   }
 
-  override asScalar(): LiteScalar {
-    return this;
+  override asScalar(): number {
+    return this.value
   }
 
   override asVector(): LiteVector {
     return new LiteVector(this.value, this.value, this.value, this.value);
   }
 
-  override asNumber(): number {
-    return this.value;
-  }
-
-  override asString(): LiteString {
-    return liteString(String(this.value))
+  override asString(): string {
+    return String(this.value)
   }
 
   static parse(value: string): LiteScalar | null {
@@ -165,8 +157,8 @@ export class LiteVector extends LiteValue {
     return new LiteRgbColor(this.x, this.y, this.z);
   }
 
-  override asScalar(): LiteScalar {
-    return new LiteScalar(this.length)
+  override asScalar(): number {
+    return this.length
   }
 
   override asVector(): LiteVector {
@@ -203,16 +195,16 @@ export class LiteVector extends LiteValue {
     return new LiteVector(this.x * amount, this.y * amount, this.z * amount, this.a * amount);
   }
 
-  override asString(): LiteString {
+  override asString(): string {
     if (this.a !== 0) {
-      return liteString(`${this.x},${this.y},${this.z},${this.a}`)
+      return `${this.x},${this.y},${this.z},${this.a}`
     }
 
     if (this.z !== 0) {
-      return liteString(`${this.x},${this.y},${this.z}`)
+      return `${this.x},${this.y},${this.z}`
     }
 
-    return liteString(`${this.x},${this.y}`)
+    return `${this.x},${this.y}`
   }
 }
 
@@ -271,16 +263,16 @@ export class LiteRgbColor extends LiteValue {
     return this;
   }
 
-  override asScalar(): LiteScalar {
-    return new LiteScalar(this.brightness)
+  override asScalar(): number {
+    return this.brightness
   }
 
   override asVector(): LiteVector {
     return new LiteVector(this.r, this.g, this.b, 0);
   }
 
-  override asString(): LiteString {
-    return liteString(`rgb(${this.r},${this.g},${this.b})`)
+  override asString(): string {
+    return `rgb(${this.r},${this.g},${this.b})`
   }
 }
 
@@ -354,8 +346,8 @@ export class LiteHsvColor extends LiteValue {
     return new LiteRgbColor(r!, g!, b!)
   }
 
-  override asScalar(): LiteScalar {
-    return new LiteScalar(this.v)
+  override asScalar(): number {
+    return this.v
   }
 
   override asVector(): LiteVector {
@@ -366,8 +358,8 @@ export class LiteHsvColor extends LiteValue {
     return new LiteHsvColor(this.h, this.s, value)
   }
 
-  override asString(): LiteString {
-    return liteString(`hsv(${this.h},${this.s},${this.v})`)
+  override asString(): string {
+    return `hsv(${this.h},${this.s},${this.v})`
   }
 }
 
@@ -375,7 +367,7 @@ export function liteFn(fn: (value: LiteValue) => LiteValue) {
   return new LiteFunction(fn)
 }
 
-export class LiteFunction<TOut = LiteValue> extends LiteValue {
+export class LiteFunction<TOut extends LiteValue = LiteValue> extends LiteValue {
   override readonly type = 'function'
 
   constructor(
@@ -392,7 +384,7 @@ export class LiteFunction<TOut = LiteValue> extends LiteValue {
     throw new Error("Cannot convert function to RGB")
   }
 
-  override asScalar(): LiteScalar {
+  override asScalar(): number {
     throw new Error("Cannot convert function to Scalar")
   }
 
@@ -400,12 +392,12 @@ export class LiteFunction<TOut = LiteValue> extends LiteValue {
     throw new Error("Cannot convert function to Scalar")
   }
 
-  override asFunction(): LiteFunction {
-    return this as LiteFunction
+  override asFunction(): (input: LiteValue) => LiteValue {
+    return this.func
   }
 
-  override asString(): LiteString {
-    return liteString('function')
+  override asString(): string {
+    return 'function'
   }
 }
 
@@ -440,7 +432,7 @@ export class LiteArray extends LiteValue {
     throw this.first.asRgb()
   }
 
-  override asScalar(): LiteScalar {
+  override asScalar(): number {
     throw this.first.asScalar()
   }
 
@@ -448,7 +440,7 @@ export class LiteArray extends LiteValue {
     throw this.first.asVector()
   }
 
-  override asFunction(): LiteFunction {
+  override asFunction() {
     return this.first.asFunction()
   }
 
@@ -456,9 +448,7 @@ export class LiteArray extends LiteValue {
     return this;
   }
 
-  override asString(): LiteString {
-    return liteString(
-      '[' + this.value.map(it => it.asString()).join(",") + ']'
-    )
+  override asString(): string {
+    return `[${this.value.map(it => it.asString()).join(",")}]`
   }
 }

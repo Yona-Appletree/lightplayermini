@@ -32,7 +32,6 @@ export class WaveNode implements LiteNodeInstance<typeof WaveNode.definition> {
     },
     outputs: {
       sine: "function",
-      sine0: "scalar",
     },
   } as const
 
@@ -40,18 +39,17 @@ export class WaveNode implements LiteNodeInstance<typeof WaveNode.definition> {
     context: LiteNodeContext,
     inputs: NodeInput<typeof WaveNode.definition>
   ): NodeOutput<typeof WaveNode.definition> {
-    const period = inputs.period.asScalar().value
-    const min = inputs.min.asScalar().value
-    const max = inputs.max.asScalar().value
-    const offset = inputs.offset.asScalar().value
+    const period = inputs.period.asScalar()
+    const min = inputs.min.asScalar()
+    const max = inputs.max.asScalar()
+    const offset = inputs.offset.asScalar()
 
     const sineFn = new LiteFunction(
-      value => liteScalar(min + ((Math.sin((value.asNumber() + offset) * ((Math.PI * 2) / period)) + 1) / 2) * (max - min))
+      value => liteScalar(min + ((Math.sin((value.asScalar() + offset) * ((Math.PI * 2) / period)) + 1) / 2) * (max - min))
     )
 
     return {
       sine: sineFn,
-      sine0: sineFn.func(liteScalar(0))
     }
   }
 }

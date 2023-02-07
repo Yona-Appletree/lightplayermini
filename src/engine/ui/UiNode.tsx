@@ -31,6 +31,16 @@ export function UiNode({node}: UiNodeLayoutProps) {
       }
     </div>
 
+    <div className={styles.UiNode_Outputs}>
+      {
+        Object.entries(node.def.outputs).map(([outputName, outputDef]) =>
+          <div>
+            {outputName}
+          </div>
+        )
+      }
+    </div>
+
     <div className={styles.UiNode_Detail}>
       {node.customUi()}
     </div>
